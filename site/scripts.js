@@ -12,6 +12,8 @@ var decisions = ["Tak", "Tak", "Tak", "Tak", "Nie", "Nie", "Nie", "Nie"];
 
 var lowApprox = lowerApproximation(array, "Tak");
 
+var upApprox = upperApproximation(array, "Tak");
+
 function lowerApproximation(array, decision) {
     var pLowArray = [];
     var innerTrueFalseCounter= 0;
@@ -38,6 +40,21 @@ function lowerApproximation(array, decision) {
     }
 
     return pLowArray;
+}
+
+function upperApproximation(array, decision) {
+    var pUpArray = lowerApproximation(array, decision);
+
+    for (var i=0; i < array.length; i++) {  
+        for (var j=0; j < array.length; j++) {
+            if (compareTwoRows(array[i], array[j]) && decisions[i] != decisions[j] && i != j) {
+                pUpArray[i] = true;
+                pUpArray[j] = true;
+                break;
+            }
+        }     
+    }  
+    return pUpArray; 
 }
 
 
