@@ -10,11 +10,33 @@ var array = [["Wysoka", "Tak", "Nie"],
 
 var decisions = ["Tak", "Tak", "Tak", "Tak", "Nie", "Nie", "Nie", "Nie"];
 
-var lowApprox = lowerApproximation(array, "Tak");
 
-var upApprox = upperApproximation(array, "Tak");
+var array2 = [
+    ["czerwone", "duze"],
+    ["zolte", "srednie"],
+    ["zielone", "male"],
+    ["zielone", "duze"],
+    ["zolte", "srednie"],
+    ["czerwone", "srednie"],
+    ["zolte", "duze"],
+    ["czerwone", "srednie"],
+    ["zolte", "male"],
+    ["zolte", "male"],
+    ["czerwone", "male"],
+    ["zielone", "srednie"],
+];
 
-function lowerApproximation(array, decision) {
+var decisions2 = ["tak", "tak", "nie", "tak", "nie", "tak", "tak", "tak", "nie", "tak", "tak", "nie"];
+
+
+
+
+
+var lowApprox = lowerApproximation(array2, decisions2, "tak");
+
+var upApprox = upperApproximation(array2, decisions2, "tak");
+
+function lowerApproximation(array,decisions, decision) {
     var pLowArray = [];
     var innerTrueFalseCounter= 0;
 
@@ -42,8 +64,8 @@ function lowerApproximation(array, decision) {
     return pLowArray;
 }
 
-function upperApproximation(array, decision) {
-    var pUpArray = lowerApproximation(array, decision);
+function upperApproximation(array, decisions, decision) {
+    var pUpArray = lowerApproximation(array, decisions, decision);
 
     for (var i=0; i < array.length; i++) {  
         for (var j=0; j < array.length; j++) {
