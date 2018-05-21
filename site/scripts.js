@@ -1,3 +1,5 @@
+var headers = ["Temperatura", "Bol glowy", "Nudnosci"];
+
 var array = [["Wysoka", "Tak", "Nie"],
     ["Bardzo wyskoka", "Tak", "Tak"],
     ["Normalna", "Tak", "Nie"],
@@ -26,15 +28,14 @@ var array2 = [
     ["zielone", "srednie"],
 ];
 
+var arrayCombined = combineHeadersWithArray(headers, array);
+
 var decisions2 = ["tak", "tak", "nie", "tak", "nie", "tak", "tak", "tak", "nie", "tak", "tak", "nie"];
 
 
+var lowApprox = lowerApproximation(arrayCombined, decisions, "Tak");
+var upApprox = upperApproximation(arrayCombined, decisions, "Tak");
 
-
-
-var lowApprox = lowerApproximation(array2, decisions2, "tak");
-
-var upApprox = upperApproximation(array2, decisions2, "tak");
 
 function lowerApproximation(array,decisions, decision) {
     var pLowArray = [];
@@ -89,6 +90,16 @@ function compareTwoRows(row1 = [], row2 = []) {
     }
 
     return true;
+}
+
+function combineHeadersWithArray(headers = [], array = [[]]) {
+    for (var i = 0; i < array.length; i++) {
+        for (var j = 0; j < array[i].length; j++) {
+            array[i][j] = headers[j] + "=" +  array[i][j]
+        }
+    }
+
+    return array;
 }
 
 
