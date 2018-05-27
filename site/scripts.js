@@ -28,13 +28,175 @@ var array2 = [
     ["zielone", "srednie"],
 ];
 
-var arrayCombined = combineHeadersWithArray(headers, array);
 
 var decisions2 = ["tak", "tak", "nie", "tak", "nie", "tak", "tak", "tak", "nie", "tak", "tak", "nie"];
 
-
+var arrayCombined = combineHeadersWithArray(headers, array);
 var lowApprox = lowerApproximation(arrayCombined, decisions, "Tak");
 var upApprox = upperApproximation(arrayCombined, decisions, "Tak");
+
+LEM2run();
+
+function LEM2run() {
+    var b = getObjectForCreateRules(arrayCombined, lowApprox)
+    var g = b;
+    var R = null;
+
+    while(g != null) {
+        stepIV(g);
+
+    }
+
+
+}
+
+
+function stepIV(g = []) {
+    var t = null;
+    var tG = getAllDescriptorsFromG(g);
+    var allSystemDescriptors = getAllDescriptorsFromG(arrayCombined);
+    var descriptorsMostValuable = [];   //T
+
+    while (tG != null /*dopisac czy rozpoznaje poza tG*/) {
+        t = findRarestDescriptor(tG, allSystemDescriptors);
+        descriptorsMostValuable.push(t);
+        tG = removeDescriptor(t, tG);
+    }
+    
+
+}
+
+function removeDescriptor(desctiptorString, array = []) {
+    var result = []
+    for(var i=0; i < array.length; i++) {
+        if (array[i] != desctiptorString) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+
+
+
+//Returning objects, which for which rules will be created 
+function getObjectForCreateRules(array = [], lowApprox = []) {
+    var objects = []
+    for (var i = 0; i < array.length; i++) {
+        if (lowApprox[i] == true) {
+            objects.push(array[i]);
+        }
+    }
+    return objects;
+}
+
+//Returning separated descriptors from specified list of objects
+function getAllDescriptorsFromG(g = []) {
+    var arrayOfSingleDescriptors = [];
+
+    for (var i = 0; i < g.length; i++) {
+        arrayOfSingleDescriptors = arrayOfSingleDescriptors.concat(g[i]);
+    }
+
+    return arrayOfSingleDescriptors;
+}
+
+
+//Finding rarest descriptor in system.
+function findRarestDescriptor(tG = [], fullSystemDescriptors= []) {
+    var countedDescriptorsArray = countSameValuesOfDescriptorsForArray(tG)
+    var countSameValuesOfDescriptorsForWholeSystem = countSameValuesOfDescriptorsForWholeSystem(tG, fullSystemDescriptors)
+    var rarestDescriptor = null;
+    
+
+    var max = Math.max.apply(Math, countedDescriptorsArray);    //max number of same elements
+    var descriptorsWithMaxValue = getDescriptorsWithEqualValue(countedDescriptorsArray, max)
+
+    var descriptorsAreSame = descriptorsInArrayAreSame(descriptorsWithMaxValue);
+
+    
+
+    if (descriptorsAreSame) {
+        rarestDescriptor = descriptorsWithMaxValue[0];
+    } else {    
+
+        var min = Math.min.apply(Math, countSameValuesOfDescriptorsForWholeSystem); //min number of same elements
+        var descriptorsWithMinValue = getDescriptorsWithEqualValue(countSameValuesOfDescriptorsForWholeSystem, min)
+        var minDescriptorsAreSame = descriptorsInArrayAreSame(descriptorsWithMinValue);
+
+        if (minDescriptorsAreSame) {
+            rarestDescriptor = descriptorsWithMinValue[0];
+        } else {
+            var randomIndex = Math.floor(Math.random() * descriptorsWithMinValue.length);
+            rarestDescriptor = descriptorsWithMinValue[randomIndex];
+        }
+
+    }
+
+    return rarestDescriptor;
+
+    
+
+    //Returning array of how many times each descriptor occurs in system in lower approximation set. 
+    function countSameValuesOfDescriptorsForArray(descriptors = []) {
+        var counter = 0;
+        var countedDescriptorsArray = [];
+        for (var i = 0; i < descriptors.length; i++) {
+            for (var j = 0; j < descriptors.length; j++) {
+                if (descriptors[i] == descriptors[j] ) {
+                    counter++;
+                }
+            }
+            countedDescriptorsArray[i] = counter;
+            counter = 0;
+        }
+
+        return countedDescriptorsArray;
+    }
+
+    //Returning array of how many times each descriptor occurs in system in whole system,
+    //including lower and higher approximation.
+    function countSameValuesOfDescriptorsForWholeSystem(descriptors = [], wholeSystem = []) {
+        var counter = 0;
+        var countedDescriptorsArray = [];
+        for (var i = 0; i < descriptors.length; i++) {
+            for (var j = 0; j < wholeSystem.length; j++) {
+                if (descriptors[i] == wholeSystem[j] ) {
+                    counter++;
+                }
+            }
+            countedDescriptorsArray[i] = counter;
+            counter = 0;
+        }
+
+        return countedDescriptorsArray;
+    }
+
+    //Getting from array of descriptors only descriptor with given value.
+    function getDescriptorsWithEqualValue(array = [], value) {
+        var result = [];
+        for (var i =0; i < tG.length; i++) {
+            if (array[i] == value) {
+                result.push(tG[i]);
+            }
+        }
+        return result;
+    }
+
+    //Checking if array of descriptors containing only single-type descriptor.
+    function descriptorsInArrayAreSame(descriptors = []) {
+        for (var i = 0; i < descriptors.length-1; i++) {
+            if (descriptors[i] != descriptors[i+1]) {
+                return false;
+            } 
+        }
+
+        return true;
+    }
+
+}
+
+
+
 
 
 function lowerApproximation(array,decisions, decision) {
