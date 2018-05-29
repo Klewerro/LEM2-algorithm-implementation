@@ -42,10 +42,9 @@ function LEM2run() {
     var g = b;
     var R = null;
 
-    while(g != null) {
-        stepIV(g);
+    var recognizedRules = [];
 
-    }
+    recognizedRules = stepIV(g);
 
 
 }
@@ -57,14 +56,109 @@ function stepIV(g = []) {
     var allSystemDescriptors = getAllDescriptorsFromG(arrayCombined);
     var descriptorsMostValuable = [];   //T
 
-    while (tG != null /*dopisac czy rozpoznaje poza tG*/) {
+    var rules = [];
+
+    var n = 0;
+    while (g.length != 0) {
+        rules.push(p3(g));
+        g = removeObjectsContainingRule(rules[n]);
+        n++;
+    }
+
+    return rules;
+    
+    
+    
+
+    
+
+    function removeObjectsContainingRule(rule = []) {
+        var counter = 0;
+        var result = [];
+
+        for (var i=0; i < g.length; i++) {
+            for (var j=0; j < rule.length; j++) {
+                if (contains(g[i], rule[j])) {
+                    counter++;
+                }
+            }
+            if (counter < rule.length) {
+                result.push(g[i]);
+            }
+            counter = 0;
+        }
+        return result;
+    }
+
+}
+
+function p3(g = []) {
+    var t = null;
+    var tG = getAllDescriptorsFromG(g);
+    var allSystemDescriptors = getAllDescriptorsFromG(arrayCombined);
+    var descriptorsMostValuable = [];   //T
+
+    while (ruleRecognizingObjectsBeyondB(descriptorsMostValuable, 
+        getOutOfBRows(lowApprox, arrayCombined))) {
         t = findRarestDescriptor(tG, allSystemDescriptors);
         descriptorsMostValuable.push(t);
         tG = removeDescriptor(t, tG);
     }
-    
 
+    return descriptorsMostValuable;
 }
+
+
+//Checking if object occurs beyond lower approximation
+//tG, arrayCombined
+function ruleRecognizingObjectsBeyondB(descriptors = [], systemArray = [[]]) {   
+    var currentSystemRow = [];
+    var nOfDescriptors = descriptors.length;
+    var counter = 0;
+
+    if (descriptors.length == 0) {
+        return true;
+    }
+
+    for (var i=0; i < systemArray.length; i++) {
+        currentSystemRow = systemArray[i];
+        for (var j=0; j < currentSystemRow.length; j++) {
+
+            if (contains(descriptors, currentSystemRow[j])) {
+                counter++
+            }
+        }
+        if (counter == nOfDescriptors) {
+            return true;
+        }
+        counter = 0;
+    }
+
+    return false;
+}
+
+
+function contains(a = [], obj) {
+    var i = a.length;
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+    return false;
+}
+
+function getOutOfBRows(lowerApprox = [], systemArray = [[]]) {
+    var result = [[]];
+
+    for (var i=0; i<lowerApprox.length; i++) {
+        if (lowerApprox[i] == false) {
+            result.push(systemArray[i])
+        }
+    }
+    return result;
+}
+
 
 function removeDescriptor(desctiptorString, array = []) {
     var result = []
