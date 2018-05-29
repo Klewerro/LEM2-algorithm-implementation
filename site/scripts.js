@@ -1,4 +1,5 @@
 var headers = ["Temperatura", "Bol glowy", "Nudnosci"];
+var decisionHeader = "Czy grypa?"
 
 var array = [["Wysoka", "Tak", "Nie"],
     ["Bardzo wyskoka", "Tak", "Tak"],
@@ -31,9 +32,10 @@ var array2 = [
 
 var decisions2 = ["tak", "tak", "nie", "tak", "nie", "tak", "tak", "tak", "nie", "tak", "tak", "nie"];
 
+var choosedDecision = "Tak"
 var arrayCombined = combineHeadersWithArray(headers, array);
-var lowApprox = lowerApproximation(arrayCombined, decisions, "Tak");
-var upApprox = upperApproximation(arrayCombined, decisions, "Tak");
+var lowApprox = lowerApproximation(arrayCombined, decisions, choosedDecision);
+var upApprox = upperApproximation(arrayCombined, decisions, choosedDecision);
 
 LEM2run();
 
@@ -42,14 +44,13 @@ function LEM2run() {
     var g = b;
     var R = null;
 
-    var recognizedRules = [];
+    var recognizedRules = stepIV(g);
+    var recognizedRulesWithDec = stepV(recognizedRules, decisionHeader, choosedDecision);
 
-    recognizedRules = stepIV(g);
-
-
+    return recognizedRulesWithDec;
 }
 
-
+//finding all rules in set (g) of objects
 function stepIV(g = []) {
     var t = null;
     var tG = getAllDescriptorsFromG(g);
@@ -68,10 +69,6 @@ function stepIV(g = []) {
     return rules;
     
     
-    
-
-    
-
     function removeObjectsContainingRule(rule = []) {
         var counter = 0;
         var result = [];
@@ -91,6 +88,36 @@ function stepIV(g = []) {
     }
 
 }
+
+//Rules conversion to conform notation
+function stepV(rules = [], decisionHeader, decision) {
+    var result = [];
+
+    for (var i=0; i<rules.length; i++) {
+        result.push(combineRulesWithDecision(rules[i]))
+    }
+
+    return result;
+
+
+    function combineRulesWithDecision(singleRule = []) {        
+        var string = "";
+        for (var j=0; j<singleRule.length; j++) {
+            string += singleRule[j] + " /\\ ";
+        }
+
+        string += "-> " + decisionHeader + " = " + decision;
+
+        var replacedString = string.replace(/\s.\\\s->/, " ->");
+        
+        return replacedString;
+    } 
+}
+
+
+
+
+
 
 function p3(g = []) {
     var t = null;
