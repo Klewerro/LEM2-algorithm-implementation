@@ -23,20 +23,21 @@
 
 <body>
     
-    <h1 class="text-center">LEM2 algorithm</h1><br><hr><br>
+    <h1 class="text-center">LEM2 algorithm</h1><br><br>
 
     <form class="form-inline  container">
         <div class="form-group">
-            <label for="files">Upload a CSV formatted file:</label>
+            <label for="files">Upload a CSV formatted file: </label>
             <input type="file" id="files" class="form-control" accept=".csv" required />
+            <input type="text" id="decision" class="form-control" required/>
         </div>
         <div class="form-group">
             <button type="button" id="submit" class="btn btn-primary" onclick="playLem2Algorithm()">Submit</button>
         </div>
     </form>
 
-    <br><br>
-    <pre id="fileDisplayArea"><pre>
+    <br><hr><br>
+    <h2 id="fileDisplayArea" class="text-center"><h2>
     
 
 

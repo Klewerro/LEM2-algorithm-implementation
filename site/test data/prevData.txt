@@ -1,0 +1,33 @@
+var headers = ["Temperatura", "Bol glowy", "Nudnosci"];
+var decisionHeader = "Czy grypa?"
+
+var array = [["Wysoka", "Tak", "Nie"],
+    ["Bardzo wyskoka", "Tak", "Tak"],
+    ["Normalna", "Tak", "Nie"],
+    ["Wysoka", "Nie", "Nie"],
+    ["Wysoka", "Tak", "Tak"],
+    ["Normalna", "Tak", "Nie"],
+    ["Bardzo wysoka", "Nie", "Nie"],
+    ["Wysoka", "Nie", "Nie"]
+];
+
+var decisions = ["Tak", "Tak", "Tak", "Tak", "Nie", "Nie", "Nie", "Nie"];
+
+
+var array2 = [
+    ["czerwone", "duze"],
+    ["zolte", "srednie"],
+    ["zielone", "male"],
+    ["zielone", "duze"],
+    ["zolte", "srednie"],
+    ["czerwone", "srednie"],
+    ["zolte", "duze"],
+    ["czerwone", "srednie"],
+    ["zolte", "male"],
+    ["zolte", "male"],
+    ["czerwone", "male"],
+    ["zielone", "srednie"],
+];
+
+
+var decisions2 = ["tak", "tak", "nie", "tak", "nie", "tak", "tak", "tak", "nie", "tak", "tak", "nie"];

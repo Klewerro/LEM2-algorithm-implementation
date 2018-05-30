@@ -16,7 +16,7 @@ function main(data) {
 
     logArraysToConsole(true); 
 
-
+    LEM2run();
     function getHeaders() {
         var result = [];
 
@@ -91,56 +91,39 @@ function playLem2Algorithm() {
 
 
 
-var headers = ["Temperatura", "Bol glowy", "Nudnosci"];
-var decisionHeader = "Czy grypa?"
+var choosedDecision;
+    var arrayCombined;
+    var lowApprox;
+    var upApprox;
 
-var array = [["Wysoka", "Tak", "Nie"],
-    ["Bardzo wyskoka", "Tak", "Tak"],
-    ["Normalna", "Tak", "Nie"],
-    ["Wysoka", "Nie", "Nie"],
-    ["Wysoka", "Tak", "Tak"],
-    ["Normalna", "Tak", "Nie"],
-    ["Bardzo wysoka", "Nie", "Nie"],
-    ["Wysoka", "Nie", "Nie"]
-];
-
-var decisions = ["Tak", "Tak", "Tak", "Tak", "Nie", "Nie", "Nie", "Nie"];
-
-
-var array2 = [
-    ["czerwone", "duze"],
-    ["zolte", "srednie"],
-    ["zielone", "male"],
-    ["zielone", "duze"],
-    ["zolte", "srednie"],
-    ["czerwone", "srednie"],
-    ["zolte", "duze"],
-    ["czerwone", "srednie"],
-    ["zolte", "male"],
-    ["zolte", "male"],
-    ["czerwone", "male"],
-    ["zielone", "srednie"],
-];
-
-
-var decisions2 = ["tak", "tak", "nie", "tak", "nie", "tak", "tak", "tak", "nie", "tak", "tak", "nie"];
-
-var choosedDecision = "Tak"
-var arrayCombined = combineHeadersWithArray(headers, array);
-var lowApprox = lowerApproximation(arrayCombined, decisions, choosedDecision);
-var upApprox = upperApproximation(arrayCombined, decisions, choosedDecision);
-
-LEM2run();
+//LEM2run();
 
 function LEM2run() {
+
+    //choosedDecision = "Tak";
+    choosedDecision = document.getElementById('decision').value;
+    arrayCombined = combineHeadersWithArray(headersCsv, arrayCsv);
+    lowApprox = lowerApproximation(arrayCombined, decisionsCsv, choosedDecision);
+    upApprox = upperApproximation(arrayCombined, decisionsCsv, choosedDecision);
+
     var b = getObjectForCreateRules(arrayCombined, lowApprox)
     var g = b;
     var R = null;
-
     var recognizedRules = stepIV(g);
-    var recognizedRulesWithDec = stepV(recognizedRules, decisionHeader, choosedDecision);
+    var recognizedRulesWithDec = stepV(recognizedRules, headerDecisionCsv, choosedDecision);
 
+    document.getElementById("fileDisplayArea").innerHTML = printRules();
     return recognizedRulesWithDec;
+
+    function printRules() {
+        var result = "";
+        for(var i=0; i<recognizedRulesWithDec.length; i++) {
+            result += recognizedRulesWithDec[i] + "<br>";
+        }
+        
+        return result;
+    }
+
 }
 
 //finding all rules in set (g) of objects
@@ -413,7 +396,7 @@ function findRarestDescriptor(tG = [], fullSystemDescriptors= []) {
 
 
 
-function lowerApproximation(array,decisions, decision) {
+function lowerApproximation(array,decisions=[], decision) {
     var pLowArray = [];
     var innerTrueFalseCounter= 0;
 
@@ -441,7 +424,7 @@ function lowerApproximation(array,decisions, decision) {
     return pLowArray;
 }
 
-function upperApproximation(array, decisions, decision) {
+function upperApproximation(array, decisions=[], decision) {
     var pUpArray = lowerApproximation(array, decisions, decision);
 
     for (var i=0; i < array.length; i++) {  
