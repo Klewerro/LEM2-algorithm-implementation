@@ -1,3 +1,96 @@
+var headersCsv;
+var headerDecisionCsv;
+var arrayCsv;
+var decisionsCsv;
+
+
+
+function main(data) {
+    var ar = [];
+    ar = data;
+
+    headersCsv = getHeaders();
+    headerDecisionCsv = getDecisionHeader();
+    arrayCsv = getArrayData();
+    decisionsCsv = getArrayDecisions();
+
+    logArraysToConsole(true); 
+
+
+    function getHeaders() {
+        var result = [];
+
+        for (var i=0; i<data[0].length-1; i++) {
+            result.push(data[0][i]);
+        }
+        return result;
+    }
+
+    function getDecisionHeader() {
+        return data[0][data[0].length-1];
+    }
+
+    function getArrayData() {
+        var result = [],
+        maxI = data.length-1,
+        maxJ = data[0].length-1;
+
+        for(var i=0; i<maxI; i++) {
+            result[i] = []
+            for(var j=0; j<maxJ; j++) {
+                result[i][j] = data[i+1][j];
+            }
+        }
+        return result;
+    }
+
+    function getArrayDecisions() {
+        var result = [],
+        nOfObjects = data.length,
+        rowLen = data[0].length-1;
+        singleDec="";
+
+        for(var i=1; i<nOfObjects; i++) {
+            singleDec = data[i][rowLen];
+            result[i-1] = singleDec;
+        }
+
+        return result;
+    }
+
+    function logArraysToConsole(bool) {
+
+        if (bool == true) {
+            console.log(data);
+            console.log(headersCsv);
+            console.log(headerDecisionCsv);
+            console.log(arrayCsv);
+            console.log(decisionsCsv);
+        }
+    }
+
+}
+
+
+function readCsvFile(callBack) {
+    var file = document.getElementById('files').files[0];
+
+    Papa.parse(file, {
+        complete: function(results) {
+            callBack(results.data);
+        }
+    });
+}
+
+
+
+
+function playLem2Algorithm() {
+    readCsvFile(main);
+}
+
+
+
 var headers = ["Temperatura", "Bol glowy", "Nudnosci"];
 var decisionHeader = "Czy grypa?"
 

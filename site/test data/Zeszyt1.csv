@@ -1,0 +1,9 @@
+Temperatura,Bol glowy,Nudnosci,Czy grypa?
+Wysoka,Tak,Nie,Tak
+Bardzo wysoka,Tak,Tak,Tak
+Normalna,Tak,Nie,Tak
+Wysoka,Nie,Nie,Tak
+Wysoka,Tak,Tak,Nie
+Normalna,Tak,Nie,Nie
+Bardzo wysoka,Nie,Nie,Nie
+Wysoka,Nie,Nie,Nie
